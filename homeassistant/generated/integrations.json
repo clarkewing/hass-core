@@ -339,6 +339,12 @@
       "config_flow": true,
       "iot_class": "local_polling"
     },
+    "apm": {
+      "name": "APM CrewConnect",
+      "integration_type": "service",
+      "config_flow": true,
+      "iot_class": "cloud_polling"
+    },
     "appalachianpower": {
       "name": "Appalachian Power",
       "integration_type": "virtual",

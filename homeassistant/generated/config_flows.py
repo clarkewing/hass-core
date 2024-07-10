@@ -52,6 +52,7 @@ FLOWS = {
         "anthemav",
         "aosmith",
         "apcupsd",
+        "apm",
         "apple_tv",
         "aprilaire",
         "apsystems",

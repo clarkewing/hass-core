@@ -1,0 +1,57 @@
+{
+  "config": {
+    "flow_title": "APM CrewConnect Setup",
+    "step": {
+      "user": {
+        "description": "Enter the host for your APM CrewConnect instance.",
+        "data": {
+          "host": "[%key:common::config_flow::data::host%]"
+        },
+        "data_description": {
+          "host": "This is sometimes referred to as the Service URL"
+        }
+      },
+      "authorize": {
+        "description": "Using Chrome with the DevTools console open, please login at:\n\n{auth_url}\n\nThen, enter the redirect URL below.",
+        "data": {
+          "auth_redirect": "Authorization Redirect URL"
+        },
+        "data_description": {
+          "auth_redirect": "Retrieve the full authorization redirect from Chrome DevTools"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]"
+    }
+  },
+  "services": {
+    "find_unstaffed_flights": {
+      "description": "Finds flights matching the specified criteria for which crew members are missing.",
+      "fields": {
+        "start_date": {
+          "description": "The start of the date range to search.",
+          "name": "Start date"
+        },
+        "end_date": {
+          "description": "The end of the date range to search (inclusive).",
+          "name": "End date"
+        },
+        "aircraft_type": {
+          "description": "The type of aircraft to filter by.",
+          "name": "Aircraft type"
+        },
+        "role": {
+          "description": "The crew role to filter by.",
+          "name": "Role"
+        }
+      },
+      "name": "Find unstaffed flights"
+    }
+  }
+}

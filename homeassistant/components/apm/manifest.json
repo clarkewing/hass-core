@@ -1,0 +1,11 @@
+{
+  "domain": "apm",
+  "name": "APM CrewConnect",
+  "codeowners": ["@clarkewing"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/apm",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "requirements": ["apm_crewconnect==0.0.10"]
+}

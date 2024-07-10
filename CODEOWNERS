@@ -117,6 +117,8 @@ build.json @home-assistant/supervisor
 /tests/components/apcupsd/ @yuxincs
 /homeassistant/components/api/ @home-assistant/core
 /tests/components/api/ @home-assistant/core
+/homeassistant/components/apm/ @clarkewing
+/tests/components/apm/ @clarkewing
 /homeassistant/components/apple_tv/ @postlund
 /tests/components/apple_tv/ @postlund
 /homeassistant/components/application_credentials/ @home-assistant/core
