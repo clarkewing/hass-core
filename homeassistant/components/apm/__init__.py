@@ -9,7 +9,7 @@ from apm_crewconnect import Apm
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, Platform
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, callback
 from homeassistant.util import Throttle
 
 from .const import CONF_APM_TOKEN, CONF_OKTA_TOKEN, DOMAIN
@@ -25,7 +25,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     data = ApmData(hass, entry, host)
 
-    await data.update()
+    await data.setup()
 
     hass.data[DOMAIN] = data
 
@@ -50,6 +50,8 @@ class ApmData:
     Also handle refreshing tokens and updating config entry with refreshed tokens.
     """
 
+    apm: Apm | None = None
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -59,13 +61,21 @@ class ApmData:
         """Initialize the APM data object."""
         self._hass = hass
         self.entry = entry
-        self.apm = self._hass.async_add_executor_job(
-            lambda: Apm(host=host, token_manager=TokenManager(hass, entry))
+        self.host = host
+
+    async def setup(self) -> None:
+        """Ensure the ApmData object is set up."""
+        self.apm = await self._hass.async_add_executor_job(
+            lambda: Apm(
+                host=self.host,
+                token_manager=TokenManager(self._hass, self.entry),
+            )
         )
 
     @Throttle(MIN_TIME_BETWEEN_UPDATES)
     async def update(self):
         """Get the latest data from APM."""
+        assert isinstance(self.apm, Apm)
         await self._hass.async_add_executor_job(self.apm.update)
 
 
@@ -107,7 +117,7 @@ class TokenManager:
         data[CONF_APM_TOKEN] = self._tokens["apm"]
         data[CONF_OKTA_TOKEN] = self._tokens["okta"]
 
-        self.hass.config_entries.async_update_entry(self.config_entry, data=data)
+        self.hass.add_job(self._update_config_entry, data)
 
     def _retrieve(self) -> None:
         self._tokens = {}
@@ -117,3 +127,7 @@ class TokenManager:
 
         if self.config_entry.data.get(CONF_OKTA_TOKEN):
             self._tokens["okta"] = self.config_entry.data[CONF_OKTA_TOKEN]
+
+    @callback
+    def _update_config_entry(self, data):
+        self.hass.config_entries.async_update_entry(self.config_entry, data=data)

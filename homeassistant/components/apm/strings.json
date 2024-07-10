@@ -39,7 +39,7 @@
           "name": "Start date"
         },
         "end_date": {
-          "description": "The end of the date range to search (inclusive).",
+          "description": "If provided, the end of the date range to search (inclusive).",
           "name": "End date"
         },
         "aircraft_type": {
